@@ -18,6 +18,9 @@ export async function GET(request: Request) {
         mode: "insensitive",
       },
     },
+    orderBy: {
+      addedOn: "desc",
+    },
   });
   return NextResponse.json(items);
 }

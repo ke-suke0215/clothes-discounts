@@ -5,22 +5,23 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 
-export default function ImgMediaCard() {
+interface ItemProps {
+  item: Item;
+}
+
+const ItemCard = ({ item }: ItemProps) => {
   return (
-    // TODO: idを動的にする
-    <Link href={`/item/1`} style={{ textDecoration: "none" }}>
+    <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
       <Card sx={{ maxWidth: 260 }}>
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          image="https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/436181/item/goods_60_436181.jpg?width=320"
-        />
+        <CardMedia component="img" alt="green iguana" image={item.imageUrl} />
         <CardContent>
           <Typography component="div" sx={{ textDecoration: "none" }}>
-            エアリズムカノコポロシャツ（ボタンダウン・半袖）
+            {item.name}
           </Typography>
         </CardContent>
       </Card>
     </Link>
   );
-}
+};
+
+export default ItemCard;

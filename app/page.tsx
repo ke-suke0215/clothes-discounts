@@ -1,8 +1,8 @@
 import { Button, Grid, Paper, Container } from "@mui/material";
 import Image from "next/image";
-import Card from "./components/Card";
+import ItemCard from "./components/ItemCard";
 
-async function getItems(name: String) {
+async function getItems(name: String): Promise<Item[]> {
   const response = await fetch(`http://localhost:3000/api/items?name=${name}`, {
     cache: "no-store",
   });
@@ -10,16 +10,15 @@ async function getItems(name: String) {
 }
 
 export default async function Home() {
-  const items = await getItems("セーター");
-  console.log(items);
+  const items: Item[] = await getItems("セーター");
 
   return (
     <div>
       <Container maxWidth="lg" sx={{ mt: 3 }}>
         <Grid container spacing={4} justifyContent="flex-start">
-          {[0, 1, 2, 3, 4].map((value) => (
-            <Grid key={value} item>
-              <Card />
+          {items.map((item: Item) => (
+            <Grid key={item.id} item>
+              <ItemCard item={item} />
             </Grid>
           ))}
         </Grid>
