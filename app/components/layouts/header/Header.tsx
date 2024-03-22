@@ -10,10 +10,10 @@ const Header = () => {
         <Toolbar>
           <Link href="/">
             <Image
-              src="/Discounts.png" // publicフォルダから画像を読み込む
-              alt="Discounts" // 画像の代替テキスト
-              width={150} // 画像の幅
-              height={40} // 画像の高さ
+              src="/Discounts.png"
+              alt="Discounts"
+              width={150}
+              height={40}
             />
           </Link>
           {/* TODO: 検索アイコン入れたい */}

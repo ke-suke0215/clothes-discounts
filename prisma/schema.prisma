@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id              Int                 @id
+  name            String
+  pageUrl         String              @map("page_url")
+  imageUrl        String              @map("image_url")
+  addedOn         DateTime            @default(now()) @map("added_on")
+  limitedDiscount LimitedDiscount[]
+
+  @@map("item")
+}
+
+model LimitedDiscount {
+  itemId   Int      @map("item_id")
+  addedOn  DateTime @default(now()) @map("added_on")
+  price    Int
+  item     Item     @relation(fields: [itemId], references: [id])
+
+  @@id([itemId, addedOn])
+  @@map("limited_discount")
+}
