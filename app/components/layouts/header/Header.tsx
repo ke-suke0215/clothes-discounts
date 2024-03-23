@@ -9,12 +9,7 @@ const Header = () => {
       <AppBar position="fixed" sx={{ backgroundColor: "white" }}>
         <Toolbar>
           <Link href="/">
-            <Image
-              src="/Discounts.png"
-              alt="Discounts"
-              width={150}
-              height={40}
-            />
+            <Image src="/logo.png" alt="logo" width={140} height={40} />
           </Link>
           {/* TODO: 検索アイコン入れたい */}
           <TextField
