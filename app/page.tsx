@@ -5,7 +5,7 @@ import ItemCard from "./components/ItemCard";
 import { useState } from "react";
 
 async function getItems(name: String): Promise<Item[]> {
-  const response = await fetch(`http://localhost:3000/api/items?name=${name}`, {
+  const response = await fetch(`/api/items?name=${name}`, {
     method: "GET",
   });
   return await response.json();
