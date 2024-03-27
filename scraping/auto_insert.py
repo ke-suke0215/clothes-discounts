@@ -83,19 +83,19 @@ image_urls = [element.get('src') for element in soup.find_all('img', class_='fr-
 if len(names) == len(prices) == len(ids):
 
   for name, price, id in zip(names, prices, ids):
-    item = SUPABASE_CLIENT.table("item").select("*").eq("id", id).execute().data[0]
+    exist_item = SUPABASE_CLIENT.table("item").select("*").eq("id", id).execute()
 
-    if item:
+    if len(exist_item.data) > 0:
       print(name + " is already exist in item table")
     else :
       # TODO: どちらかのURLがNoneだったらエラーにする
       page_url = get_matching_elements(id, page_urls)
       image_url = get_matching_elements(id, image_urls)
 
-      item = Item(id, name, page_url, image_url)
+      new_item = Item(id, name, page_url, image_url)
 
       # itemテーブルへのinsert
-      data = {"id": item.id, "name": item.name, "page_url": item.page_url, "image_url": item.image_url}
+      data = {"id": new_item.id, "name": new_item.name, "page_url": new_item.page_url, "image_url": new_item.image_url}
       insert_response = SUPABASE_CLIENT.table("item").insert(data).execute()
       print("insert " + name + " to item table")
 
