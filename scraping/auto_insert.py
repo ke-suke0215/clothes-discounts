@@ -89,8 +89,6 @@ ids = [extract_id(element.get('id')) for element in soup.find_all('a', class_='f
 page_urls = [UNIQLO_DOMAIN + element.get('href') for element in soup.find_all('a', class_='fr-ec-product-tile')]
 image_urls = [element.get('src') for element in soup.find_all('img', class_='fr-ec-image__img')]
 
-supabase: Client = create_client(url, key)
-
 if len(names) == len(prices) == len(ids):
 
   for name, price, id in zip(names, prices, ids):
