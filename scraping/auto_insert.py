@@ -67,6 +67,7 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
+print("Start scraping...")
 driver = webdriver.Chrome(service=webdriver_service, options=options)
 driver.get(OPEN_URL)
 time.sleep(10)
