@@ -41,31 +41,6 @@ def extract_id(input_string):
   numbers_only = re.sub(pattern, '', parts[0])
   return numbers_only
 
-# idを指定してItemを取得する.
-def find_by_id_from_item(id):
-  conn = psycopg2.connect(
-    host = HOST,
-    port = PORT,
-    database = DATABASE_NAME,
-    user = USER_NAME,
-    password = PASSWORD
-  )
-
-  cursor = conn.cursor()
-  cursor.execute("SELECT id, name, page_url, image_url FROM item WHERE id = %s;", (id,))
-
-  record = cursor.fetchone()
-
-  # コネクションとカーソルをクローズ
-  cursor.close()
-  conn.close()
-
-  if record:
-    item = Item(*record)  
-    return item
-  else:
-    return None
-
 ###############################
 ######### メインの処理 ##########
 ###############################
@@ -92,7 +67,7 @@ image_urls = [element.get('src') for element in soup.find_all('img', class_='fr-
 if len(names) == len(prices) == len(ids):
 
   for name, price, id in zip(names, prices, ids):
-    item = find_by_id_from_item(id)
+    item = SUPABASE_CLIENT.table("item").select("*").eq("id", id).execute().data[0]
 
     if item:
       print(name + " is already exist in item table")
