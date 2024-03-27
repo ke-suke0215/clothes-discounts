@@ -83,6 +83,9 @@ image_urls = [element.get('src') for element in soup.find_all('img', class_='fr-
 
 if len(names) == len(prices) == len(ids):
 
+  # TODO: ループで1こずつinsertではなくバルクで入れたい
+  # TODO: 失敗したときにCIのジョブがfailになるのかわからないので検証したい（現状だと失敗しても気付けないかも）
+
   for name, price, id in zip(names, prices, ids):
     exist_item = SUPABASE_CLIENT.table("item").select("*").eq("id", id).execute()
 

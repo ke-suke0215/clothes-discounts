@@ -1,7 +1,8 @@
 name: Python CI
 
-# TODO: 正しく動くようになったらcronの定期実行にする
-on: [push]
+on:
+  schedule:
+    - cron: "0 6 * * *"
 
 jobs:
   auto-insert:
@@ -15,7 +16,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      # 一通りinstallしたイメージを作成してそれを使うようにしたい
+      # TODO: 一通りinstallしたイメージを作成してそれを使うようにしたい
       # ChromeとPythonの依存関係をDockerfileに記載したい（ジョブの実行時はイメージをpull、pythonのコードをcopyして実行の流れを想定）
       - name: Install Chrome
         run: |
