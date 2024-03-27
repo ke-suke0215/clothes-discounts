@@ -12,6 +12,22 @@ from datetime import datetime
 import psycopg2
 
 ###############################
+######### クラスを定義 ##########
+###############################
+
+class Item:
+  def __init__(self, id, name, page_url, image_url):
+    self.id = id
+    self.name = name
+    self.page_url = page_url
+    self.image_url = image_url
+
+class LimitedDiscount:
+  def __init__(self, item_id, price):
+    self.item_id = item_id
+    self.price = price
+
+###############################
 ########## 定数を定義 ###########
 ###############################
 
@@ -79,17 +95,17 @@ if len(names) == len(prices) == len(ids):
       item = Item(id, name, page_url, image_url)
 
       # itemテーブルへのinsert
+      data = {"id": item.id, "name": item.name, "page_url": item.page_url, "image_url": item.image_url}
+      insert_response = SUPABASE_CLIENT.table("item").insert(data).execute()
       print("insert " + name + " to item table")
-      # TODO: 修正必要かも（insertの引数はオブジェクトの形にすべき？）
-      # insert_response = SUPABASE_CLIENT.table("item").insert(item).execute()
 
     # limited_discountへのinsert
     # TODO: 当日のデータがすでにあった場合はinsertしないようにする
     try:
-      print("insert " + name + " to limited_discount table")
       limited_discount = LimitedDiscount(id, price)
-      # TODO: 修正必要かも（insertの引数はオブジェクトの形にすべき？）
-      # insert_response = SUPABASE_CLIENT.table("limited_discount").insert(limited_discount).execute()
+      data = {"item_id": limited_discount.item_id, "price": limited_discount.price}
+      insert_response = SUPABASE_CLIENT.table("limited_discount").insert(data).execute()
+      print("insert " + name + " to limited_discount table")
     except Exception:
       print("failed to insert " + name + " to limited_discount table")
 
