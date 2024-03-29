@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 import time
 import re
 from datetime import datetime
-import psycopg2
 
 ###############################
 ######### クラスを定義 ##########
@@ -115,7 +114,7 @@ if len(names) == len(prices) == len(ids):
 
 # 取得した要素の数が一致しないとき、エラーとする
 else:
-  print('取得された要素数が正しくありません')
-  print(f'Name: {len(names)}')
-  print(f'Prices: {len(prices)}')
-  print(f'Ids: {len(ids)}')
+  print('Failed to get elements')
+  print(f'Names count: {len(names)}')
+  print(f'Prices count: {len(prices)}')
+  print(f'Ids count: {len(ids)}')
