@@ -2,7 +2,7 @@ name: Python CI
 
 on:
   schedule:
-    - cron: "0 21 * * *" # 日本時間ののAM6:00に自動実行（タイムゾーンの関係で9時間差がある）
+    - cron: "0 1 * * *"
 
 jobs:
   auto-insert:
