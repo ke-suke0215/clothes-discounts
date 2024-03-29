@@ -15,7 +15,3 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --upgrade pip \
     && pip install supabase selenium webdriver-manager beautifulsoup4 \
     && rm -rf /root/.cache/pip
-
-WORKDIR /app
-
-COPY scraping/ /app/
