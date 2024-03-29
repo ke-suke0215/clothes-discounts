@@ -1,19 +1,19 @@
-FROM python:3.10
+FROM python:3.10-slim
 
-# Chromeをインストールするための依存関係をインストール
-RUN apt-get update && apt-get install -y \
+# Chromeをインストール
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     xvfb \
     libxi6 \
-    libgconf-2-4
-
-# Chromeをダウンロードしてインストール
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+    libgconf-2-4 \
+ && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+ && dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /google-chrome-stable_current_amd64.deb
 
 # Python依存関係のインストール
 RUN pip install --upgrade pip \
-    && pip install supabase selenium webdriver-manager beautifulsoup4 psycopg2-binary
+    && pip install supabase selenium webdriver-manager beautifulsoup4 \
+    && rm -rf /root/.cache/pip
 
-# 作業ディレクトリの設定
 WORKDIR /app
