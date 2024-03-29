@@ -1,7 +1,9 @@
 name: Python CI
 
 on:
-  schedule: [push]
+  push:
+    branches:
+      - main
 
 jobs:
   auto-insert:
