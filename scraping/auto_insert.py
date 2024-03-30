@@ -66,6 +66,11 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 
+# 現在の日付を取得
+# テーブルには日付の情報のみ持たせたいので、時間は00:00:00にする（アプリのORMにprismaを使っている関係でpostgresqlのdate型が使えない）
+current_date = datetime.today()
+data_str = current_date.strftime('%Y-%m-%d') + ' 00:00:00'
+
 print("Start scraping...")
 driver = webdriver.Chrome(service=webdriver_service, options=options)
 driver.get(OPEN_URL)
@@ -98,7 +103,7 @@ if len(names) == len(prices) == len(ids):
       new_item = Item(id, name, page_url, image_url)
 
       # itemテーブルへのinsert
-      data = {"id": new_item.id, "name": new_item.name, "page_url": new_item.page_url, "image_url": new_item.image_url}
+      data = {"id": new_item.id, "name": new_item.name, "page_url": new_item.page_url, "image_url": new_item.image_url, "added_on": data_str}
       insert_response = SUPABASE_CLIENT.table("item").insert(data).execute()
       print("insert " + name + " to item table")
 
@@ -106,7 +111,7 @@ if len(names) == len(prices) == len(ids):
     # TODO: 当日のデータがすでにあった場合はinsertしないようにする
     try:
       limited_discount = LimitedDiscount(id, price)
-      data = {"item_id": limited_discount.item_id, "price": limited_discount.price}
+      data = {"item_id": limited_discount.item_id, "price": limited_discount.price, "added_on": data_str}
       insert_response = SUPABASE_CLIENT.table("limited_discount").insert(data).execute()
       print("insert " + name + " to limited_discount table")
     except Exception:
