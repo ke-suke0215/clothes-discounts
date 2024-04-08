@@ -9,7 +9,7 @@ const Header = () => {
       <AppBar position="fixed" sx={{ backgroundColor: "white" }}>
         <Toolbar>
           <Link href="/">
-            <Image src="/logo.png" alt="logo" width={130} height={50} />
+            <Image src="/logo.png" alt="logo" width={200} height={30} />
           </Link>
         </Toolbar>
       </AppBar>

@@ -32,7 +32,7 @@ export default function Home() {
             variant="outlined"
             size="small"
             value={searchText}
-            sx={{ width: "60%", mb: 5 }}
+            sx={{ width: "100%", mb: 5 }}
             onChange={(e) => setSearchText(e.target.value)}
           />
         </form>
