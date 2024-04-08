@@ -70,9 +70,11 @@ options.add_argument('--disable-dev-shm-usage')
 # 現在の日付を取得
 # テーブルには日付の情報のみ持たせたいので、時間は00:00:00にする（アプリのORMにprismaを使っている関係でpostgresqlのdate型が使えない）
 current_date = datetime.today()
+print("Current date: " + current_date.strftime('%Y-%m-%d'))
 # Actions上で実行する際にTZがUTCになるので、時差を考慮する
 date_include_time_diff = now + datetime.timedelta(hours=TIME_DIFFERENCE)
 data_str = date_include_time_diff.strftime('%Y-%m-%d') + ' 00:00:00'
+print("時差を考慮した日本時間: " + data_str)
 
 print("Start scraping...")
 driver = webdriver.Chrome(service=webdriver_service, options=options)
