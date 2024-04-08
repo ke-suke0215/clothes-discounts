@@ -2,7 +2,7 @@ name: Python CI
 
 on:
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "0 22 * * *"
 
 jobs:
   auto-insert:

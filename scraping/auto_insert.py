@@ -35,6 +35,7 @@ OPEN_URL = "https://www.uniqlo.com/jp/ja/feature/limited-offers/men"
 SUPABASE_URL: str = os.environ['SUPABASE_URL']
 SUPABASE_API_KEY: str = os.environ['SUPABASE_API_KEY']
 SUPABASE_CLIENT: Client = create_client(SUPABASE_URL, SUPABASE_API_KEY)
+TIME_DIFFERENCE = 9  # UTCとの時差
 
 ###############################
 #### 使用する関数を事前に定義 #####
@@ -69,7 +70,9 @@ options.add_argument('--disable-dev-shm-usage')
 # 現在の日付を取得
 # テーブルには日付の情報のみ持たせたいので、時間は00:00:00にする（アプリのORMにprismaを使っている関係でpostgresqlのdate型が使えない）
 current_date = datetime.today()
-data_str = current_date.strftime('%Y-%m-%d') + ' 00:00:00'
+# Actions上で実行する際にTZがUTCになるので、時差を考慮する
+date_include_time_diff = now + datetime.timedelta(hours=TIME_DIFFERENCE)
+data_str = date_include_time_diff.strftime('%Y-%m-%d') + ' 00:00:00'
 
 print("Start scraping...")
 driver = webdriver.Chrome(service=webdriver_service, options=options)
@@ -87,7 +90,7 @@ image_urls = [element.get('src') for element in soup.find_all('img', class_='fr-
 
 if len(names) == len(prices) == len(ids):
 
-  # TODO: ループで1こずつinsertではなくバルクで入れたい
+  # TODO: ループで1個ずつinsertではなくバルクで入れたい
   # TODO: 失敗したときにCIのジョブがfailになるのかわからないので検証したい（現状だと失敗しても気付けないかも）
 
   for name, price, id in zip(names, prices, ids):
