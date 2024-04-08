@@ -128,3 +128,5 @@ else:
   print(f'Names count: {len(names)}')
   print(f'Prices count: {len(prices)}')
   print(f'Ids count: {len(ids)}')
+
+driver.quit()
