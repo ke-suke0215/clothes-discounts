@@ -72,7 +72,7 @@ options.add_argument('--disable-dev-shm-usage')
 current_date = datetime.today()
 print("Current date: " + current_date.strftime('%Y-%m-%d  %H:%M:%S'))
 # Actions上で実行する際にTZがUTCになるので、時差を考慮する
-date_include_time_diff = now + datetime.timedelta(hours=TIME_DIFFERENCE)
+date_include_time_diff = current_date + datetime.timedelta(hours=TIME_DIFFERENCE)
 print("時差を考慮した現在時刻: " + date_include_time_diff.strftime('%Y-%m-%d %H:%M:%S'))
 data_str = date_include_time_diff.strftime('%Y-%m-%d') + ' 00:00:00'
 
