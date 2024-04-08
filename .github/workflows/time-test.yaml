@@ -1,0 +1,14 @@
+name: timezone test
+
+on:
+  push:
+
+jobs:
+  auto-insert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Insert data to Supabase
+        run: python scraping/time_test.py
