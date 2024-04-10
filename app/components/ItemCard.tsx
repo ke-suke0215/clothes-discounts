@@ -11,7 +11,7 @@ interface ItemProps {
 
 const ItemCard = ({ item }: ItemProps) => {
   return (
-    <Link href={`/item/${item.id}`} style={{ textDecoration: "none" }}>
+    <Link href={`/items/${item.id}`} style={{ textDecoration: "none" }}>
       <Card sx={{ maxWidth: 260 }}>
         <CardMedia component="img" alt="green iguana" image={item.imageUrl} />
         <CardContent>
