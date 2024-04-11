@@ -13,7 +13,7 @@ const ItemCard = ({ item }: ItemProps) => {
   return (
     <Link href={`/items/${item.id}`} style={{ textDecoration: "none" }}>
       <Card sx={{ maxWidth: 260 }}>
-        <CardMedia component="img" alt="green iguana" image={item.imageUrl} />
+        <CardMedia component="img" alt={item.name} image={item.imageUrl} />
         <CardContent>
           <Typography component="div" sx={{ textDecoration: "none" }}>
             {item.name}
