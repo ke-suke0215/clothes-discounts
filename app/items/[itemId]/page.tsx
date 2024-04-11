@@ -14,7 +14,7 @@ async function getItem(id: number): Promise<Item> {
   return item;
 }
 
-export const ItemDetailPage = ({ params }: { params: { itemId: string } }) => {
+const ItemDetailPage = ({ params }: { params: { itemId: string } }) => {
   const [item, setItem] = useState({} as Item);
 
   const itemIdAsNumber: number = parseInt(params.itemId);
@@ -37,4 +37,5 @@ export const ItemDetailPage = ({ params }: { params: { itemId: string } }) => {
     </div>
   );
 };
+
 export default ItemDetailPage;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -31,10 +31,10 @@ function ServerDay(
 /**
  * ハイライトする日付を取得する.
  */
-async function fetchDate(itemId: number, { signal }: { signal: AbortSignal }) {
-  // const response = await fetch(`/api/limitedDiscounts/${itemId}`, {
-  //   signal,
-  // });
+async function fetchDate(itemId: number, signal: { signal: AbortSignal }) {
+  const response = await fetch(`/api/limitedDiscounts/${itemId}`, {
+    signal: signal.signal,
+  });
 
   // TODO: APIから取得する
   return [itemId % 30];
@@ -51,7 +51,7 @@ const DiscountsCalender = ({ itemId }: DiscountsCalenderProps) => {
 
   const initialValue = dayjs();
 
-  const fetchHighlightedDays = () => {
+  const fetchHighlightedDays = useCallback(() => {
     const controller = new AbortController();
     fetchDate(itemId, {
       signal: controller.signal,
@@ -67,13 +67,13 @@ const DiscountsCalender = ({ itemId }: DiscountsCalenderProps) => {
       });
 
     requestAbortController.current = controller;
-  };
+  }, [itemId]);
 
   useEffect(() => {
     fetchHighlightedDays();
     // abort request on unmount
     return () => requestAbortController.current?.abort();
-  }, []);
+  }, [fetchHighlightedDays]);
 
   const handleMonthChange = (date: Dayjs) => {
     if (requestAbortController.current) {
@@ -82,7 +82,6 @@ const DiscountsCalender = ({ itemId }: DiscountsCalenderProps) => {
       requestAbortController.current.abort();
     }
 
-    console.log(date.month());
     setIsLoading(true);
     setHighlightedDays([]);
     fetchHighlightedDays();
