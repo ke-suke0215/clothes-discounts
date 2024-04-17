@@ -5,3 +5,7 @@ interface Item {
   imageUrl: string;
   addedOn: Date;
 }
+
+interface CalenderDates {
+  [key: number]: { [key: number]: number[] };
+}
