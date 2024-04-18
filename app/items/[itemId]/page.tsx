@@ -5,6 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Link from "next/link";
 import DiscountsCalender from "@/app/components/DiscountsCalender";
 import { setLazyProp } from "next/dist/server/api-utils";
+import DiscountsList from "@/app/components/DiscountsList";
 
 const getItem = async (id: number): Promise<Item> => {
   const response = await fetch(`/api/items/${id}`, {
@@ -78,8 +79,14 @@ const ItemDetailPage = ({ params }: { params: { itemId: string } }) => {
    */
   useEffect(() => {
     const fetchLimitedDiscounts = async () => {
-      const fetchedLimitedDiscounts: LimitedDiscount[] =
-        await fetchDiscountDates(itemIdAsNumber);
+      const fetchedLimitedDiscounts: LimitedDiscount[] = await (
+        await fetchDiscountDates(itemIdAsNumber)
+      ).map((limitedDiscount) => {
+        return {
+          ...limitedDiscount,
+          addedOn: new Date(limitedDiscount.addedOn),
+        };
+      });
 
       setLimitedDiscounts(fetchedLimitedDiscounts);
     };
@@ -105,6 +112,7 @@ const ItemDetailPage = ({ params }: { params: { itemId: string } }) => {
     <div>
       <h1>{item.name}</h1>
       <DiscountsCalender discountDates={discountDates} />
+      <DiscountsList limitedDiscounts={limitedDiscounts} />
       <CardMedia component="img" alt={item.name} image={item.imageUrl} />
       {item.pageUrl && <Link href={item.pageUrl}>公式サイト</Link>}
     </div>
