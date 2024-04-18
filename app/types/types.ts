@@ -6,6 +6,12 @@ interface Item {
   addedOn: Date;
 }
 
+interface LimitedDiscount {
+  item_id: number;
+  price: number;
+  addedOn: Date;
+}
+
 interface CalenderDates {
   [key: number]: { [key: number]: number[] };
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -32,28 +32,53 @@ function ServerDay(
  * APIから日付データを取得する.
  */
 const fetchDates = async (itemId: number): Promise<CalenderDates> => {
+  console.log("fetchDates開始");
   // TODO: APIからデータ取得
-  return {
-    2023: {
-      1: [1, 2, 3],
-      4: [1, 2, 3],
-    },
-  };
+  const response = await fetch(`/api/limitedDiscounts/${itemId}`, {
+    method: "GET",
+  });
+
+  const limitedDiscounts: LimitedDiscount[] = await response.json();
+  const result: CalenderDates = {};
+
+  limitedDiscounts.forEach((limitedDiscount) => {
+    const date = new Date(limitedDiscount.addedOn);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    if (result[year] === undefined) {
+      result[year] = {};
+    }
+    if (result[year][month] === undefined) {
+      result[year][month] = [];
+    }
+    result[year][month].push(day);
+  });
+
+  console.log("fetchDates終わり");
+  return result;
 };
 
 const DiscountsCalender = ({ itemId }: { itemId: number }) => {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [highlightedDays, setHighlightedDays] = React.useState([1, 2, 15]);
-  const [dates, setDates] = React.useState({} as CalenderDates);
+  const [isLoading, setIsLoading] = useState(true);
+  const [highlightedDays, setHighlightedDays] = useState([] as number[]);
+  const [dates, setDates] = useState({} as CalenderDates);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
-      const data = await fetchDates(itemId);
+      const data: CalenderDates = await fetchDates(itemId);
       setDates(data);
-      setHighlightedDays(pickHighlightedDays(dayjs()));
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemId]);
+
+  useEffect(() => {
+    console.log("datesが変更されたときのuseEffect");
+    console.log(dates);
+    setHighlightedDays(pickHighlightedDays(dayjs()));
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dates]);
 
   /**
    * 月を変更したときの処理.
