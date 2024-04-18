@@ -13,5 +13,5 @@ interface LimitedDiscount {
 }
 
 interface CalenderDates {
-  [key: number]: { [key: number]: number[] };
+  [year: number]: { [month: number]: number[] };
 }
