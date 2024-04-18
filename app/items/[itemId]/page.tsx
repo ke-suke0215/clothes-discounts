@@ -6,6 +6,7 @@ import Link from "next/link";
 import DiscountsCalender from "@/app/components/DiscountsCalender";
 import { setLazyProp } from "next/dist/server/api-utils";
 import DiscountsList from "@/app/components/DiscountsList";
+import { Container, Grid } from "@mui/material";
 
 const getItem = async (id: number): Promise<Item> => {
   const response = await fetch(`/api/items/${id}`, {
@@ -110,11 +111,26 @@ const ItemDetailPage = ({ params }: { params: { itemId: string } }) => {
 
   return (
     <div>
-      <h1>{item.name}</h1>
-      <DiscountsCalender discountDates={discountDates} />
-      <DiscountsList limitedDiscounts={limitedDiscounts} />
-      <CardMedia component="img" alt={item.name} image={item.imageUrl} />
-      {item.pageUrl && <Link href={item.pageUrl}>公式サイト</Link>}
+      <Container maxWidth="lg" sx={{ mt: 3, mb: 6 }}>
+        <h1>{item.name}</h1>
+        <Grid container spacing={4}>
+          <Grid item xs={4}>
+            <CardMedia
+              component="img"
+              alt={item.name}
+              image={item.imageUrl}
+              sx={{ mb: 3 }}
+            />
+            {item.pageUrl && <Link href={item.pageUrl}>公式サイト</Link>}
+          </Grid>
+          <Grid item xs={4}>
+            <DiscountsCalender discountDates={discountDates} />
+          </Grid>
+          <Grid item xs={3}>
+            <DiscountsList limitedDiscounts={limitedDiscounts} />
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   );
 };
