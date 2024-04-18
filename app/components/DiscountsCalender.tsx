@@ -28,57 +28,19 @@ function ServerDay(
   );
 }
 
-/**
- * APIから日付データを取得する.
- */
-const fetchDates = async (itemId: number): Promise<CalenderDates> => {
-  console.log("fetchDates開始");
-  // TODO: APIからデータ取得
-  const response = await fetch(`/api/limitedDiscounts/${itemId}`, {
-    method: "GET",
-  });
-
-  const limitedDiscounts: LimitedDiscount[] = await response.json();
-  const result: CalenderDates = {};
-
-  limitedDiscounts.forEach((limitedDiscount) => {
-    const date = new Date(limitedDiscount.addedOn);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    if (result[year] === undefined) {
-      result[year] = {};
-    }
-    if (result[year][month] === undefined) {
-      result[year][month] = [];
-    }
-    result[year][month].push(day);
-  });
-
-  console.log("fetchDates終わり");
-  return result;
-};
-
-const DiscountsCalender = ({ itemId }: { itemId: number }) => {
+const DiscountsCalender = ({
+  discountDates,
+}: {
+  discountDates: CalenderDates;
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [highlightedDays, setHighlightedDays] = useState([] as number[]);
-  const [dates, setDates] = useState({} as CalenderDates);
 
   useEffect(() => {
-    (async () => {
-      const data: CalenderDates = await fetchDates(itemId);
-      setDates(data);
-    })();
-  }, [itemId]);
-
-  useEffect(() => {
-    console.log("datesが変更されたときのuseEffect");
-    console.log(dates);
     setHighlightedDays(pickHighlightedDays(dayjs()));
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dates]);
+  }, [discountDates]);
 
   /**
    * 月を変更したときの処理.
@@ -91,10 +53,10 @@ const DiscountsCalender = ({ itemId }: { itemId: number }) => {
 
   const pickHighlightedDays = (date: Dayjs): number[] => {
     if (
-      dates[date.year()] !== undefined &&
-      dates[date.year()][date.month() + 1] !== undefined
+      discountDates[date.year()] !== undefined &&
+      discountDates[date.year()][date.month() + 1] !== undefined
     ) {
-      return dates[date.year()][date.month() + 1];
+      return discountDates[date.year()][date.month() + 1];
     }
     return [];
   };
